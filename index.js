@@ -3,6 +3,7 @@ const express = require('express')
 const ip = require('ip')
 const app = express()
 const cors = require("cors")
+const bitsocketd = require('fountainhead-bitsocketd')
 
 const config = {
   "query": {
@@ -12,9 +13,10 @@ const config = {
       "f": "[.[] | .out[] | .str]"
      }
   },
-  "url": process.env.bitsocket_url ? process.env.bitsocket_url : "http://127.0.0.1:3000/s/",
-  "port": Number.parseInt(process.env.sockserve_port ? process.env.sockserve_port : 3005)
+  "host": process.env.sockserve_host ? process.env.sockserve_host : "http://127.0.0.1",
+  "port": Number.parseInt(process.env.sockserve_port ? process.env.sockserve_port : 3001)
 };
+config.url = config.host + ":" + config.port + "/s/";
 
 var db
 
@@ -52,3 +54,16 @@ app.listen(config.port, () => {
   console.log("######################################################################################");
   }
 )
+
+bitsocketd.init({
+    bit: {
+        host: process.env.zmq_outgoing_host ? process.env.zmq_outgoing_host : '0.0.0.0',
+        port: Number.parseInt(process.env.zmq_outgoing_port ? process.env.zmq_outgoing_port : 28339)
+    },
+    socket: {
+        port: process.env.sockserve_port ? process.env.sockserve_port : 3000,
+        app: app
+    },
+    heartbeat: 10
+});
+
