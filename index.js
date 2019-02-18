@@ -7,7 +7,7 @@ const cors = require("cors")
 const config = {
   "query": {
     "v": 3,
-    "q": { "find": {}, "limit": 10 },
+    "q": { "find": {} },
     "r": {
       "f": "[.[] | .out[] | .str]"
      }
