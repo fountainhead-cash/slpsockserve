@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Sockserve Fountainhead</title>
+<title>Bitsocket Fountainhead</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 @import url('https://fonts.googleapis.com/css?family=Noto+Sans+TC');
@@ -9,18 +9,18 @@ body {
   font-family: 'Noto Sans TC', sans-serif;
   font-size: 12px;
   margin: 0;
-  background: #202124;
+  background: #f5f5f5;
 }
 .content {
   border-bottom: 1px rgba(255,255,255,0.1) solid;
 }
 .container {
-  background: #fff6d4;
   color: white;
+  font-family: "Helvetica Neue", helvetica, arial;
+  font-size: 1em;
 }
 header {
   display: flex;
-  border-bottom: #eae1bd;
 }
 .flexible {
   flex-grow: 1;
@@ -54,13 +54,13 @@ pre {
   overflow: auto;
 }
 table {
-  background: #2d2d2d;
+  /*background: #2d2d2d;*/
   table-layout: fixed;
   width: 100%;
   border-collapse: collapse;
 }
 tr:nth-child(odd) {
-  background-color: #323232;
+  background-color: #00000005 !important;
 }
 th td {
   text-align: center;
@@ -114,13 +114,12 @@ td {
   padding: 5px 10px;
 }
 button {
-    padding: 10px;
-    background: #596a9d;
-    color: #fff;
-    border: none;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
+  padding: 9px;
+  background: #A5C261;
+  border: none;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
 }
 button:focus {
   outline: 0;
@@ -134,15 +133,14 @@ input.url:focus{
   outline: none;
 }
 input.url {
+  background: rgba(0,0,0, 0.1);
   padding: 10px;
-  background-color: #eae1bd;
-  color: #504c4c;
   border: none;
   font-family: Menlo, monaco, Courier;
   font-size: 11px;
   transition: background 1000ms ease-in;
   border-radius: 0;
-  -webkit-appearance:none;
+  -webkit-appearance: none;
 }
 input.url.updated {
   background: gold;
@@ -152,27 +150,42 @@ a.brand {
   font-size: 16px;
   font-family: "Helvetica Neue", helvetica, arial;
 }
+tr {
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
 .flex {
   display: flex;
+  padding: 8px 0px 6px 0px;
+  align-items: center;
 }
 .label {
   padding: 10px;
-}
-main {
-  margin-bottom:6rem;
 }
 .date-td {
   text-align: center;
   vertical-align:top;
   width: 5rem;
-  color: #f1f1f1;
+  color: rgba(0,0,0,0.7);
+}
+.loading {
+  padding: 15px;
+  text-align: center;
+  font-size: 12px;
+  color: rgba(0,0,0,0.7);
+}
+.fa, .fas {
+  font-weight: 900;
+  color: #000;
+  font-size:0.89em;
+  padding: 0;
+  margin: 0;
 }
 </style>
 
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 <link rel="stylesheet" href="/jsontree.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.3.3/ace.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.3.3/mode-json.js"></script>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.1/ace.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.1/mode-json.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
 <script src="/jsontree.js"></script>
 <script id="grid-template" type="text/x-handlebars-template">
@@ -193,7 +206,7 @@ main {
 <body>
   <div class='container'>
     <header>
-      <a href='/' class='brand'>Sockserve Fountainhead</a>
+      <a href='/' class='brand'>Bitsocket Fountainhead</a>
       <div class='flexible'></div>
       <a target='_blank' href='https://docs.fountainhead.cash' class='item'><i class='fas fa-book'></i> Documentation</a>
     </header>
@@ -202,10 +215,18 @@ main {
       <div class='flex'>
         <span class='label'>API endpoint</span>
         <input readonly class='flexible url'>
-        <button id='query'>Run query</button>
+        <button id='query'>OPEN SOCKET</button>
       </div>
     </div>
   </div>
+  <div class='loading'>
+      <span class='led'>
+        <span>
+         <i class="fas fa-power-off spinner"></i>
+        </span>
+         <span class='msg'></span>
+      </span>
+    </div>
   <main>
     <div id='channel'>
       <div class='content'>
@@ -219,6 +240,14 @@ main {
 </body>
 <script>
 
+var audio = {
+  u: new Audio('/u.mp3'),
+  c: new Audio('/c.mp3'),
+  muted: false
+}
+audio.u.loop = false;
+audio.c.loop = false;
+
 var endpoint = '<%=bitserve_url%>';
 var source   = document.getElementById("grid-template").innerHTML;
 var template = Handlebars.compile(source);
@@ -226,7 +255,7 @@ var editor;
 document.addEventListener("DOMContentLoaded", function(e) {
   editor = ace.edit("editor");
   editor.session.setMode("ace/mode/json");
-  editor.setTheme("ace/theme/twilight");
+  editor.setTheme("ace/theme/idle_fingers");
   editor.setShowPrintMargin(false);
   editor.setOptions({
     maxLines: Infinity,
@@ -271,13 +300,34 @@ var run = function() {
         }
 
         bitsocket = new EventSource(endpoint + btoa(query));
+        
+        bitsocket.onopen = function(e) { // start spinning
+          document.querySelector(".loading i.spinner").classList.add("fa-spin")
+          document.querySelector(".loading .msg").innerHTML = "listening..."
+        }
+        
+        bitsocket.onclose = function(e) { // stop spinning
+          document.querySelector(".loading i.spinner").classList.remove("fa-spin")
+          document.querySelector(".loading .msg").innerHTML = "stopped..."
+          console.log(e)
+        }
+
         bitsocket.onmessage = function(e) {
           let data = JSON.parse(e.data);
-          let tbody = document.getElementById('channel-content-area');
-          let tr = tbody.insertRow(-1); // put at start
-          let node = document.createElement('tr');
-          node.innerHTML = render(data);
-          tr.parentNode.prepend(node);
+          
+          if (data.type === 'block') {
+            audio.c.play().catch(function(e) { });
+          } else if (data.type === 'mempool') {
+            audio.u.play().catch(function(e) { });
+          }
+
+          if(data.type == "mempool" || data.type == "block") { // disallow non-bitcoin related stuff
+            let tbody = document.getElementById('channel-content-area');
+            let tr = tbody.insertRow(-1); // put at start
+            let node = document.createElement('tr');
+            node.innerHTML = render(data.data, data.type); // "type":"" isn't queryable
+            tr.parentNode.prepend(node);          
+          }
         }
       }
     } catch (e) {
@@ -295,8 +345,8 @@ var updateUrl = function(query) {
   }, 500)
 }
 
-var render = function(item) {
-  return "<td class='main-td'>"+JSONTree.create(item)+"</td><td class='date-td'>"+((new Date).toLocaleTimeString())+"</td>";
+var render = function(item, type) {
+  return "<td class='main-td'>"+JSONTree.create(item)+"</td><td class='date-td'><div>"+type+"</div>"+((new Date).toLocaleTimeString())+"</td>";
 }
 </script>
 </html>

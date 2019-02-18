@@ -1,15 +1,15 @@
 .jstValue {
     white-space: pre-wrap;
-    font-size: 14px;
+    font-size: 1em;
     font-weight: 400;
-    font-family: "Inconsolata", Monaco, monospace;
+    font-family: monospace;
 }
 .jstComma {
     white-space: pre-wrap;
     color: #aaaaaa;
 }
 .jstProperty {
-    color: #f0f0f0;
+    color: rgba(0,0,0,0.7);
     word-wrap: break-word;
 }
 .jstBracket {
@@ -20,16 +20,17 @@
     color: #2525CC;
 }
 .jstNum {
-    color: #ff82ff;
+    color: #1d9600;
 }
 .jstNull {
     color: gray;
 }
 .jstStr {
-    color: #fff474;
+    color: rgba(0,0,0,0.7);
 }
 .jstFold {
-    color: #9fa2ff;
+    color: #001b58;
+    font-size: 1.3em;
 }
 .jstFold:after {
     content: ' -';
@@ -37,7 +38,7 @@
 }
 .jstExpand {
     white-space: normal;
-    color: #ffffff;
+    color: #696969;
 }
 .jstExpand:after {
     content: ' +';
