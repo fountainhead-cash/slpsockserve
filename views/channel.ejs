@@ -248,7 +248,7 @@ var audio = {
 audio.u.loop = false;
 audio.c.loop = false;
 
-var endpoint = '<%=bitserve_url%>';
+var endpoint = window.location.origin + '/s/';
 var source   = document.getElementById("grid-template").innerHTML;
 var template = Handlebars.compile(source);
 var editor;
