@@ -3,7 +3,7 @@ const express = require('express')
 const ip = require('ip')
 const app = express()
 const cors = require("cors")
-const bitsocketd = require('fountainhead-bitsocketd')
+const slpsocketd = require('fountainhead-slpsocketd')
 
 const config = {
   "query": {
@@ -13,8 +13,8 @@ const config = {
       "f": "[.[] | .out[] | .str]"
      }
   },
-  "host": process.env.sockserve_host ? process.env.sockserve_host : "http://127.0.0.1",
-  "port": Number.parseInt(process.env.sockserve_port ? process.env.sockserve_port : 3001)
+  "host": process.env.slpsockserve_host ? process.env.slpsockserve_host : "http://127.0.0.1",
+  "port": Number.parseInt(process.env.slpsockserve_port ? process.env.slpsockserve_port : 3001)
 };
 config.url = config.host + ":" + config.port + "/s/";
 
@@ -44,7 +44,7 @@ app.get('/', function(req, res) {
 app.listen(config.port, () => {
   console.log("######################################################################################");
   console.log("#")
-  console.log("#  SOCKSERVE: Bitsocket Microservice")
+  console.log("#  SLPSOCKSERVE: SLPsocket Microservice")
   console.log("#  Serving Transactions through HTTP...")
   console.log("#")
   console.log(`#  Channel: ${ip.address()}:${config.port}/channel`);
@@ -55,15 +55,16 @@ app.listen(config.port, () => {
   }
 )
 
-bitsocketd.init({
+slpsocketd.init({
     bit: {
         host: process.env.zmq_outgoing_host ? process.env.zmq_outgoing_host : '0.0.0.0',
         port: Number.parseInt(process.env.zmq_outgoing_port ? process.env.zmq_outgoing_port : 28339)
     },
     socket: {
-        port: process.env.sockserve_port ? process.env.sockserve_port : 3000,
+        port: process.env.slpsockserve_port ? process.env.slpsockserve_port : 3000,
         app: app
     },
-    heartbeat: 10
+    heartbeat: 10,
+    verbose: true
 });
 
