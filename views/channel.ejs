@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Bitsocket Fountainhead</title>
+<title>SLPsocket Fountainhead</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 @import url('https://fonts.googleapis.com/css?family=Noto+Sans+TC');
@@ -206,7 +206,7 @@ tr {
 <body>
   <div class='container'>
     <header>
-      <a href='/' class='brand'>Bitsocket Fountainhead</a>
+      <a href='/' class='brand'>SLPsocket Fountainhead</a>
       <div class='flexible'></div>
       <a target='_blank' href='https://docs.fountainhead.cash' class='item'><i class='fas fa-book'></i> Documentation</a>
     </header>
@@ -315,18 +315,34 @@ var run = function() {
         bitsocket.onmessage = function(e) {
           let data = JSON.parse(e.data);
           
-          if (data.type === 'block') {
-            audio.c.play().catch(function(e) { });
-          } else if (data.type === 'mempool') {
-            audio.u.play().catch(function(e) { });
+          switch (data.type) {
+            case 'mempool':
+            case 'mempool-slp-genesis':
+            case 'mempool-slp-mint':
+            case 'mempool-slp-send':
+              audio.u.play().catch(function(e) { });
+              break;
+            case 'block':
+            case 'block-slp-genesis':
+            case 'block-slp-mint':
+            case 'block-slp-send':
+              audio.c.play().catch(function(e) { });
+              break;
           }
 
-          if(data.type == "mempool" || data.type == "block") { // disallow non-bitcoin related stuff
-            let tbody = document.getElementById('channel-content-area');
-            let tr = tbody.insertRow(-1); // put at start
-            let node = document.createElement('tr');
-            node.innerHTML = render(data.data, data.type); // "type":"" isn't queryable
-            tr.parentNode.prepend(node);          
+          switch (data.type) {
+            case 'mempool-slp-genesis':
+            case 'mempool-slp-mint':
+            case 'mempool-slp-send':
+            case 'block-slp-genesis':
+            case 'block-slp-mint':
+            case 'block-slp-send': // disallow non-bitcoin related stuff
+              let tbody = document.getElementById('channel-content-area');
+              let tr = tbody.insertRow(-1); // put at start
+              let node = document.createElement('tr');
+              node.innerHTML = render(data.data, data.type); // "type":"" isn't queryable
+              tr.parentNode.prepend(node);
+              break;
           }
         }
       }

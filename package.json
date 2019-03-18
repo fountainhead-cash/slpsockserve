@@ -1,7 +1,7 @@
 {
-  "name": "fountainhead-sockserve",
+  "name": "fountainhead-slpsockserve",
   "version": "0.0.1",
-  "description": "bitsocket frontend",
+  "description": "slpsocket frontend",
   "main": "index.js",
   "scripts": {
     "start": "node index"
@@ -13,7 +13,7 @@
     "dotenv": "^6.0.0",
     "ejs": "^2.6.1",
     "express": "^4.16.3",
-    "fountainhead-bitsocketd": "^0.1.4",
+    "fountainhead-slpsocketd": "0.0.3",
     "ip": "^1.1.5"
   }
 }
