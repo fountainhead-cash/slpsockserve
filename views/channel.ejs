@@ -317,26 +317,16 @@ var run = function() {
           
           switch (data.type) {
             case 'mempool':
-            case 'mempool-slp-genesis':
-            case 'mempool-slp-mint':
-            case 'mempool-slp-send':
               audio.u.play().catch(function(e) { });
               break;
             case 'block':
-            case 'block-slp-genesis':
-            case 'block-slp-mint':
-            case 'block-slp-send':
               audio.c.play().catch(function(e) { });
               break;
           }
 
           switch (data.type) {
-            case 'mempool-slp-genesis':
-            case 'mempool-slp-mint':
-            case 'mempool-slp-send':
-            case 'block-slp-genesis':
-            case 'block-slp-mint':
-            case 'block-slp-send': // disallow non-bitcoin related stuff
+            case 'mempool':
+            case 'block': // disallow non-bitcoin related stuff
               let tbody = document.getElementById('channel-content-area');
               let tr = tbody.insertRow(-1); // put at start
               let node = document.createElement('tr');

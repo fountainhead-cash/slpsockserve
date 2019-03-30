@@ -8,10 +8,7 @@ const slpsocketd = require('fountainhead-slpsocketd')
 const config = {
   "query": {
     "v": 3,
-    "q": { "find": {} },
-    "r": {
-      "f": "[.[] | .out[] | .str]"
-     }
+    "q": { "find": {} }
   },
   "host": process.env.slpsockserve_host ? process.env.slpsockserve_host : "http://127.0.0.1",
   "port": Number.parseInt(process.env.slpsockserve_port ? process.env.slpsockserve_port : 3001)
