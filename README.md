@@ -1,18 +1,18 @@
-## What is Sockserve?
+## What is SLPSockserve?
 
-Sockserve is a frontend API for Bitd that provides a streaming output of new transactions. Unlike [Bitserve](https://github.com/fountainhead-cash/bitserve) which is a similar frontend API used to fetch historical blockchain data, Sockserve can be used display data as it comes in.
+SLPSockserve is a frontend API for SLPDB that provides a streaming output of new transactions. Unlike [slpserve](https://github.com/fountainhead-cash/slpserve) which is a similar frontend API used to fetch historical blockchain data, SLPSockserve can be used display data as it comes in.
 
 ## Installation
 
 ### Prerequisite
 
-For Sockserve to work you first need to go through the install process for [bitd](https://github.com/fountainhead-cash/bitd), which will continually scan the blockchain for new transactions and blocks which will be streamed live over the Bitsocket (sockserve) API.
+For SLPSockserve to work you first need to go through the install process for [bitd](https://github.com/simpledger/SLPDB), which will continually scan the blockchain for new transactions and blocks which will be streamed live over the SLPsocket (slpsockserve) API.
 
-### Setting up Sockserve
+### Setting up SLPSockserve
 
 Clone this repository:
 ```
-git clone https://github.com/fountainhead-cash/sockserve.git && cd sockserve
+git clone https://github.com/fountainhead-cash/slpsockserve.git && cd slpsockserve
 ```
 
 Install dependencies:
@@ -27,7 +27,7 @@ $(EDITOR) .env
 
 ```
 
-Start Sockserve
+Start SLPSockserve
 ```
 npm start
 ```
