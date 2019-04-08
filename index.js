@@ -3,7 +3,7 @@ const express = require('express')
 const ip = require('ip')
 const app = express()
 const cors = require("cors")
-const slpsocketd = require('fountainhead-slpsocketd')
+const slpsocketd = require('fountainhead-core').slpsocketd
 
 const config = {
   "query": {
