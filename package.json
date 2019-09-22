@@ -1,6 +1,6 @@
 {
   "name": "fountainhead-slpsockserve",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "slpsocket frontend",
   "main": "index.js",
   "scripts": {
@@ -13,7 +13,7 @@
     "dotenv": "^6.0.0",
     "ejs": "^2.6.1",
     "express": "^4.16.3",
-    "fountainhead-slpsocketd": "0.1.3",
+    "fountainhead-core": "0.0.12",
     "ip": "^1.1.5"
   }
 }
